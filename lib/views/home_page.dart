@@ -90,96 +90,124 @@ class MyHomePage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(10)),
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
               height: 20,
               width: size.width * 0.6,
               child: Column(
                 children: [
                   Expanded(
                       flex: 4,
-                      child: Container(
-                        child: Stack(children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10)),
-                            child: Image.asset(
-                              'assets/images/Image.png',
-                              fit: BoxFit.contain,
-                            ),
+                      child: Stack(children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10)),
+                          child: Image.asset(
+                            'assets/images/Image.png',
+                            fit: BoxFit.contain,
                           ),
-                          Positioned(
-                            bottom: 0,
-                            child: Container(
-                              // color: Colors.red,
-                              height: size.width * 0.22,
-                              width: size.width * 0.6,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'The Camellia',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          child: Container(
+                            // color: Colors.red,
+                            height: size.width * 0.22,
+                            width: size.width * 0.6,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'The Camellia',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const Text(
+                                    '14th Avn, Near by Mg Street Bangalore',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 10),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.black12,
+                                        border: Border.all(
+                                            color:
+                                                Colors.grey.withOpacity(0.5))),
+                                    width: 60,
+                                    height: 20,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: const [
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                          size: 14,
+                                        ),
+                                        Text(
+                                          '4.5',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          '(82)',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 10),
+                                        )
+                                      ],
                                     ),
-                                    const Text(
-                                      '14th Avn, Near by Mg Street Bangalore',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 10),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          color: Colors.black12,
-                                          border: Border.all(
-                                              color: Colors.grey
-                                                  .withOpacity(0.5))),
-                                      width: 60,
-                                      height: 20,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: const [
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                            size: 14,
-                                          ),
-                                          Text(
-                                            '4.5',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            '(82)',
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 10),
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                  )
+                                ],
                               ),
                             ),
-                          )
-                        ]),
-                      )),
+                          ),
+                        ),
+                        const Positioned(
+                          top: 10,
+                          right: 10,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 18,
+                            child: Icon(CupertinoIcons.heart),
+                          ),
+                        )
+                      ])),
                   Expanded(
                       flex: 1,
-                      child: Container(
-                          // color: Colors.blue,
-                          )),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RichText(
+                              text: const TextSpan(children: [
+                                TextSpan(
+                                    text: '₹11,499',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                                TextSpan(
+                                    text: ' / night',
+                                    style: TextStyle(
+                                        fontSize: 13, color: Colors.grey))
+                              ]),
+                            ),
+                            const Icon(
+                              CupertinoIcons.right_chevron,
+                              color: Colors.grey,
+                            )
+                          ],
+                        ),
+                      )),
                 ],
               ),
             ),
