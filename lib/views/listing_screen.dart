@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:leisure_module/views/indivdual_page.dart';
 
 class ListingScreen extends StatelessWidget {
   const ListingScreen({super.key});
@@ -76,38 +77,42 @@ class ListingScreen extends StatelessWidget {
                   '42 Properties found',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-                displayCard(context)
+                Expanded(
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => IndvidualPage(),
+                              ));
+                        },
+                        child: displayCard(context)))
               ],
             ),
           )),
     );
   }
 
-  Card displayCard(context) {
+  SizedBox displayCard(context) {
     final size = MediaQuery.of(context).size;
-    return Card(
-      color: Colors.white,
-      elevation: 4,
-      child: SizedBox(
-        height: size.height * 0.6,
-        child: ListView.builder(
-          itemBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Stack(
-                  children: [
-                    Column(children: [
-                      imageStackSection(size),
-                      const SizedBox(height: 15),
-                      detailsSection()
-                    ]),
-                    bedroomSqftStackSection(size)
-                  ],
-                )),
-          ),
+    return SizedBox(
+      height: size.height * 0.6,
+      child: ListView.builder(
+        itemBuilder: (context, index) => Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              child: Stack(
+                children: [
+                  Column(children: [
+                    imageStackSection(size),
+                    const SizedBox(height: 15),
+                    detailsSection()
+                  ]),
+                  bedroomSqftStackSection(size)
+                ],
+              )),
         ),
       ),
     );
