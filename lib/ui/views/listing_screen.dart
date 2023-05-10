@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:leisure_module/ui/controller/data_controller.dart';
 import 'package:leisure_module/ui/views/indivdual_page.dart';
+import 'package:provider/provider.dart';
 
 class ListingScreen extends StatelessWidget {
   const ListingScreen({super.key});
@@ -77,16 +79,7 @@ class ListingScreen extends StatelessWidget {
                   '42 Properties found',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-                Expanded(
-                    child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => IndvidualPage(),
-                              ));
-                        },
-                        child: displayCard(context)))
+                Expanded(child: displayCard(context))
               ],
             ),
           )),
@@ -97,24 +90,36 @@ class ListingScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return SizedBox(
       height: size.height * 0.6,
-      child: ListView.builder(
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              child: Stack(
-                children: [
-                  Column(children: [
-                    imageStackSection(size),
-                    const SizedBox(height: 15),
-                    detailsSection()
-                  ]),
-                  bedroomSqftStackSection(size)
-                ],
-              )),
-        ),
-      ),
+      child: Consumer<DataController>(builder: (context, value, _) {
+        return ListView.builder(
+          itemBuilder: (context, index) => GestureDetector(
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => IndvidualPage(findex: index),
+                )),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Stack(
+                    children: [
+                      Card(
+                        child: Column(children: [
+                          imageStackSection(size, value, index),
+                          const SizedBox(height: 15),
+                          detailsSection()
+                        ]),
+                      ),
+                      bedroomSqftStackSection(size)
+                    ],
+                  )),
+            ),
+          ),
+        );
+      }),
     );
   }
 
@@ -213,7 +218,8 @@ class ListingScreen extends StatelessWidget {
             child: Row(
               children: [
                 Image.asset('assets/images/daisy_avatar.png'),
-                Text('Room Hosted by Daisy')
+                const SizedBox(width: 10),
+                const Text('Room Hosted by Daisy')
               ],
             ),
           )
@@ -222,7 +228,7 @@ class ListingScreen extends StatelessWidget {
     );
   }
 
-  Stack imageStackSection(Size size) {
+  Stack imageStackSection(Size size, DataController value, index) {
     return Stack(
       children: [
         SizedBox(
@@ -244,23 +250,28 @@ class ListingScreen extends StatelessWidget {
               Positioned(
                 bottom: 0,
                 child: SizedBox(
-                  height: size.width * 0.22,
+                  // height: size.width * 0.22,
                   width: size.width * 0.6,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'The Camellia',
-                          style: TextStyle(
+                        Text(
+                          value.albumDataList != null
+                              ? value.albumDataList![index].title!
+                              : 'loading..',
+                          style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.bold),
                         ),
-                        const Text(
-                          'Double deluxe with attatched bath',
-                          style: TextStyle(color: Colors.white, fontSize: 10),
+                        Text(
+                          value.albumPhotoDataList != null
+                              ? value.albumPhotoDataList![index].title!
+                              : 'loading..',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 10),
                         ),
                         const SizedBox(height: 8),
                         Row(
@@ -326,7 +337,8 @@ class ListingScreen extends StatelessWidget {
                               ),
                             ),
                           ],
-                        )
+                        ),
+                        SizedBox(height: 20),
                       ],
                     ),
                   ),

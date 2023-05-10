@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:leisure_module/ui/controller/data_controller.dart';
+import 'package:provider/provider.dart';
 
 class IndvidualPage extends StatelessWidget {
-  const IndvidualPage({super.key});
-
+  IndvidualPage({super.key, required this.findex});
+  int findex;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -14,22 +16,14 @@ class IndvidualPage extends StatelessWidget {
           Stack(
             children: [
               SizedBox(
-                width: double.infinity,
+                width: size.width,
                 child: Image.asset(
                   'assets/images/d9f6a984-4ce8-4dc5-b513-cdc25c7b9360 1.png',
                   fit: BoxFit.fill,
                 ),
               ),
-              SizedBox(
-                height: size.height * 0.52,
-                width: double.infinity,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      customAppBar(size, context),
-                      imageLabel(size),
-                    ]),
-              ),
+              customAppBar(size, context),
+              Positioned(bottom: 0, child: imageLabel(size, findex)),
             ],
           ),
           Container(
@@ -39,20 +33,22 @@ class IndvidualPage extends StatelessWidget {
               // height: 500,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                child: Column(
-                  children: [
-                    anEntirePlaceSection(size),
-                    const Divider(),
-                    notesFromTheHostSection(),
-                    const Divider(),
-                    bedsForComfortSleepSection(),
-                    const SizedBox(height: 30),
-                    hereWhatWeOfferSection(),
-                    const SizedBox(height: 20),
-                    discoverTheStaySection(),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+                child: Consumer<DataController>(builder: (context, value, _) {
+                  return Column(
+                    children: [
+                      anEntirePlaceSection(size),
+                      const Divider(),
+                      notesFromTheHostSection(value, findex, context),
+                      const Divider(),
+                      bedsForComfortSleepSection(value),
+                      const SizedBox(height: 30),
+                      hereWhatWeOfferSection(),
+                      const SizedBox(height: 20),
+                      discoverTheStaySection(context),
+                      const SizedBox(height: 20),
+                    ],
+                  );
+                }),
               ),
             )),
           )
@@ -61,7 +57,7 @@ class IndvidualPage extends StatelessWidget {
     );
   }
 
-  SizedBox discoverTheStaySection() {
+  SizedBox discoverTheStaySection(context) {
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -146,18 +142,18 @@ class IndvidualPage extends StatelessWidget {
               )),
           const SizedBox(height: 30),
           imageTextParagraphWidget(
-            image: 'assets/images/icon_images/rupee.png',
-            title: 'Cancellation policy',
-            subtitle: 'Cancel anytime before 30 July 2022',
-          ),
+              image: 'assets/images/icon_images/rupee.png',
+              title: 'Cancellation policy',
+              subtitle: 'Cancel anytime before 30 July 2022',
+              context: context),
           const SizedBox(height: 20),
           const Divider(),
           const SizedBox(height: 20),
           imageTextParagraphWidget(
-            image: 'assets/images/icon_images/rules.png',
-            title: 'House rules',
-            subtitle: 'Cancel anytime before 30 July 2022',
-          ),
+              image: 'assets/images/icon_images/rules.png',
+              title: 'House rules',
+              subtitle: 'Cancel anytime before 30 July 2022',
+              context: context),
           const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
@@ -254,7 +250,7 @@ class IndvidualPage extends StatelessWidget {
     );
   }
 
-  Card bedsForComfortSleepSection() {
+  Card bedsForComfortSleepSection(DataController value) {
     return Card(
       child: SizedBox(
           width: double.infinity,
@@ -268,7 +264,7 @@ class IndvidualPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                height: 250,
+                height: 265,
                 child: ListView.builder(
                   // shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
@@ -277,51 +273,68 @@ class IndvidualPage extends StatelessWidget {
                     elevation: 5,
                     child: Padding(
                       padding: const EdgeInsets.all(3.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Stack(
                         children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10)),
-                            child: Image.asset(
-                              'assets/images/deluxe_room.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Deluxe Room',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10)),
+                                child: Image.asset(
+                                  'assets/images/deluxe_room.png',
+                                  fit: BoxFit.contain,
                                 ),
-                                const Text(
-                                  '132 sqft - Max 2 Adult with 1 child',
-                                  style: TextStyle(fontSize: 10),
+                              ),
+                              const SizedBox(height: 20),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        value.albumDataList![index].title!,
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        value.albumPhotoDataList![index].title!,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                        'assets/images/icon_images/tv_icon.png'),
-                                    const Text(' TV '),
-                                    Image.asset(
-                                        'assets/images/icon_images/ac_icon.png'),
-                                    const Text(' AC '),
-                                    const SizedBox(width: 60),
-                                    const Text('+8 more')
-                                  ],
-                                )
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
+                          Positioned(
+                            bottom: 0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                      'assets/images/icon_images/tv_icon.png'),
+                                  const Text(' TV '),
+                                  Image.asset(
+                                      'assets/images/icon_images/ac_icon.png'),
+                                  const Text(' AC '),
+                                  const SizedBox(width: 50),
+                                  const Text('+8 more')
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -333,7 +346,8 @@ class IndvidualPage extends StatelessWidget {
     );
   }
 
-  Column notesFromTheHostSection() {
+  Column notesFromTheHostSection(
+      DataController value, int index, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -344,9 +358,9 @@ class IndvidualPage extends StatelessWidget {
         const SizedBox(height: 10),
         profileCard(),
         const SizedBox(height: 10),
-        const Text(
-          'Our luxurious villa, designed to offer a hamonius blend\n of modern amenities and traditional charm. Situated in an\n idyllic location,our villa provides an exquisite and serene\n stay for discerning travelers seeking a sophisticated and\n unforgottable experience',
-          style: TextStyle(fontSize: 13),
+        Text(
+          value.postList![index].body!,
+          style: const TextStyle(fontSize: 13),
         ),
         const Text(
           'Read more',
@@ -359,17 +373,16 @@ class IndvidualPage extends StatelessWidget {
         ),
         const SizedBox(height: 15),
         imageTextParagraphWidget(
-          image: 'assets/images/icon_images/hassle_free_check_in.png',
-          title: 'Hassle free check-in',
-          subtitle:
-              'Our in-house caretaker is available 24/7 to assist\n you with anything you need during stay',
-        ),
+            image: 'assets/images/icon_images/hassle_free_check_in.png',
+            title: value.albumDataList![index].title!,
+            subtitle: value.postList![index].body!,
+            context: context),
         const SizedBox(height: 20),
         imageTextParagraphWidget(
-          image: 'assets/images/icon_images/Timer.png',
-          title: '24x7 power backup',
-          subtitle: 'Extra discount offered for special members',
-        ),
+            image: 'assets/images/icon_images/Timer.png',
+            title: value.albumDataList![index + 1].title!,
+            subtitle: value.postList![index + 1].body!,
+            context: context),
       ],
     );
   }
@@ -377,27 +390,32 @@ class IndvidualPage extends StatelessWidget {
   Padding imageTextParagraphWidget(
       {required String image,
       required String title,
-      required String subtitle}) {
+      required String subtitle,
+      required BuildContext context}) {
+    final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(image),
-          const SizedBox(width: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-              Text(
-                subtitle,
-                style: const TextStyle(fontSize: 13),
-              )
-            ],
+          const SizedBox(width: 16),
+          SizedBox(
+            width: size.width * 0.75,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                Text(
+                  subtitle,
+                  style: const TextStyle(fontSize: 13),
+                )
+              ],
+            ),
           )
         ],
       ),
@@ -523,112 +541,116 @@ class IndvidualPage extends StatelessWidget {
     );
   }
 
-  SizedBox imageLabel(Size size) {
+  SizedBox imageLabel(Size size, int index) {
     return SizedBox(
-      height: size.height * 0.15,
-      width: double.infinity,
+      // height: size.height * 0.1,
+      width: size.width,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'The Camellia',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold),
-            ),
-            const Text(
-              '100% Pet friendly pool villa with LakeView',
-              style: TextStyle(color: Colors.white, fontSize: 15),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.black12,
-                          border:
-                              Border.all(color: Colors.grey.withOpacity(0.5))),
-                      width: 60,
-                      height: 20,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                            size: 14,
-                          ),
-                          Text(
-                            '4.5',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '(82)',
-                            style: TextStyle(color: Colors.grey, fontSize: 10),
-                          )
-                        ],
+        child: Consumer<DataController>(builder: (context, value, _) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                value.albumDataList![index].title!,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                value.albumPhotoDataList![index].title!,
+                style: const TextStyle(color: Colors.white, fontSize: 15),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.black12,
+                            border: Border.all(
+                                color: Colors.grey.withOpacity(0.5))),
+                        width: 60,
+                        height: 20,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: const [
+                            Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                              size: 14,
+                            ),
+                            Text(
+                              '4.5',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              '(82)',
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 10),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.black12,
-                          border:
-                              Border.all(color: Colors.grey.withOpacity(0.5))),
-                      // width: 60,
-                      height: 20,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          Icon(
-                            Icons.location_on_rounded,
-                            color: Colors.amber,
-                            size: 14,
-                          ),
-                          Text(
-                            ' 14th Avn, Bangalore ',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                      const SizedBox(width: 10),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.black12,
+                            border: Border.all(
+                                color: Colors.grey.withOpacity(0.5))),
+                        // width: 60,
+                        height: 20,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: const [
+                            Icon(
+                              Icons.location_on_rounded,
+                              color: Colors.amber,
+                              size: 14,
+                            ),
+                            Text(
+                              ' 14th Avn, Bangalore ',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
-                    Icon(
-                      CupertinoIcons.photo_on_rectangle,
-                      color: Colors.white,
-                      size: 14,
-                    ),
-                    Text(
-                      '1/16',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      Icon(
+                        CupertinoIcons.photo_on_rectangle,
+                        color: Colors.white,
+                        size: 14,
+                      ),
+                      Text(
+                        '1/16',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10)
+            ],
+          );
+        }),
       ),
     );
   }

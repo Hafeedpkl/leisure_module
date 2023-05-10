@@ -5,6 +5,8 @@ import 'package:leisure_module/ui/services/allservices.dart';
 class DataController with ChangeNotifier {
   List<ApiDataModel>? albumDataList;
   List<ApiDataModel>? albumPhotoDataList;
+  List<ApiDataModel>? postList;
+
   bool isloading = false;
   Future<void> getAlbums() async {
     isloading = true;
@@ -23,6 +25,18 @@ class DataController with ChangeNotifier {
     notifyListeners();
     await AllServices().getAlbumPhoto().then((value) {
       albumPhotoDataList = value;
+      notifyListeners();
+      isloading = false;
+    });
+    isloading = false;
+    notifyListeners();
+  }
+
+  Future<void> getPosts() async {
+    isloading = true;
+    notifyListeners();
+    await AllServices().getPosts().then((value) {
+      postList = value;
       notifyListeners();
       isloading = false;
     });

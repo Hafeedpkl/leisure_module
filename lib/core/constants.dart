@@ -1,1 +1,1 @@
-const KbaseUrl = 'https://jsonplaceholder.typicode.com';
+ const KbaseUrl = 'https://jsonplaceholder.typicode.com';

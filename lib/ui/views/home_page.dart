@@ -58,6 +58,7 @@ class MyHomePage extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<DataController>(context, listen: false).getAlbums();
       Provider.of<DataController>(context, listen: false).getAlbumsPhoto();
+      Provider.of<DataController>(context, listen: false).getPosts();
     });
     return Scaffold(
         appBar: AppBar(
@@ -207,9 +208,7 @@ class MyHomePage extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 10,
-                                      )
+                                      const SizedBox(height: 10)
                                     ],
                                   ),
                                 ),
