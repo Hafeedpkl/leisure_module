@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:leisure_module/views/indivdual_page.dart';
+import 'package:leisure_module/ui/views/indivdual_page.dart';
 
 class ListingScreen extends StatelessWidget {
   const ListingScreen({super.key});

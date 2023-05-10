@@ -78,7 +78,10 @@ class IndvidualPage extends StatelessWidget {
           ),
           const Text(
               '14th Cross Rd, Botanica Garden, JPNagar,\n VI Phase, Bangalore, Karnataka, 560066'),
-          Image.asset('assets/images/google_map.png'),
+          Image.asset(
+            'assets/images/google_map.png',
+            filterQuality: FilterQuality.high,
+          ),
           const Text(
             'Safety & Property',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
